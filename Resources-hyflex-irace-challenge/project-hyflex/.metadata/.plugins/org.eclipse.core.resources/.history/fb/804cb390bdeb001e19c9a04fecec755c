@@ -1,0 +1,145 @@
+package choicefunction;
+
+import AbstractClasses.HyperHeuristic;
+import AbstractClasses.ProblemDomain;
+import travelingSalesmanProblem.TSP;
+import AbstractClasses.ProblemDomain.HeuristicType;
+
+public class SCF extends HyperHeuristic {
+	
+	double[] dosValues, iomValues;
+	
+	public SCF(long seed, double[] dosValue, double[] iomValue) {
+
+		super(seed);
+		dosValues = dosValue;
+		iomValues = iomValue;
+	}
+	
+	/**
+	 * TODO - Implement a selection hyper-heuristic using the simplified choice function (SCF)
+	 * 		  heuristic selection method accepting all moves (AM).
+	 *
+	 * PSEUDOCODE:
+	 *
+	 * INPUT: problem_instance
+	 * hs <- { MTN } U { RR } U { LS }
+	 * s <- initialiseSolution();
+	 * scf <- initialiseNewSimplifiedChoiceFunctionMethod();
+	 *
+	 * WHILE termination criterion is not met DO
+	 *
+	 *     h <- scf.selectHeuristicToApply();
+	 *     setHeuristicParameterSettings(iom, dos);
+	 *     s' <- h(s);
+	 *
+	 *     scf.updateHeuristicData(h_i, t, t_delta, f(s), f(s'));
+	 *
+	 *     accept();
+	 *
+	 * END_WHILE
+	 *
+	 * return s_{best};
+	 */
+	public void solve(ProblemDomain problem) {
+		
+		int heuristic_to_apply = 0; int init_flag = 0;
+		long time_exp_before, time_exp_after, time_to_apply;
+		double new_obj_function_value = 0.00;
+				
+		// Record the number of low level heuristics, as this changes depending on the problem domain
+		int number_of_heuristics = problem.getNumberOfHeuristics();
+		long startTimeNano = System.nanoTime();
+			
+		
+		// Initialise low-level heuristics array
+		Heuristic[] heuristics = createHeuristics(problem, dosValues, iomValues, startTimeNano);
+		int[] heuristics_to_use = get_heuristics_to_use(problem);
+				
+		problem.initialiseSolution(0);
+		double current_obj_function_value = problem.getFunctionValue(0);
+
+		
+		SimplifiedChoiceFunction scf = new SimplifiedChoiceFunction(heuristics);
+		
+		
+		Heuristic h = heuristics[0];
+		while(!hasTimeExpired()) {
+			if(init_flag<heuristics_to_use.length) {
+				int randomIndex = rng.nextInt(heuristics_to_use.length);
+				heuristic_to_apply = heuristics_to_use[randomIndex];
+				h = heuristics[heuristic_to_apply];
+				init_flag++;
+			}else {
+				h = scf.selectHeuristicToApply();
+			}
+			System.out.println("To use next: "+h.getHeuristicId());
+			
+			time_exp_before = System.nanoTime();
+			new_obj_function_value = problem.applyHeuristic(h.getHeuristicId(), 0, 0);
+			time_exp_after = System.nanoTime();
+			time_to_apply = time_exp_after - time_exp_before + 1; //+1 prevents / by 0
+												
+			scf.updateHeuristicData(h, time_exp_before, time_to_apply, current_obj_function_value, new_obj_function_value);
+			
+			
+//			System.out.println("-----Information of each LLH-----");
+//			for(Heuristic llh:heuristics) {
+//				System.out.println("ID: "+llh.getHeuristicId()+" LastApplied: "+llh.getData().getTimeLastApplied()
+//						+" Config: "+llh.getConfiguration().getIom()+" "+llh.getConfiguration().getDos());
+//			}
+					//set the current objective function value to the new function value as the new solution is now the current solution
+			current_obj_function_value = new_obj_function_value;
+			
+			
+		}
+	}
+	
+	public String toString() {
+
+		return "SCF_AM_HH";
+	}
+	
+	private Heuristic[] createHeuristics(ProblemDomain problem, double[] dosValues, double[] iomValues, long startTimeNano) {
+		int numHeuristics = problem.getNumberOfHeuristics();
+		Heuristic[] heuristics = new Heuristic[numHeuristics];
+    	for (int i = 0; i < numHeuristics; i++) {
+            HeuristicConfiguration configuration = new HeuristicConfiguration(0.2, 0.2);
+            heuristics[i] = new Heuristic(configuration, i, startTimeNano); 
+        }
+        
+        int[] dosHeuristics = problem.getHeuristicsThatUseDepthOfSearch();
+        int[] iomHeuristics = problem.getHeuristicsThatUseIntensityOfMutation();
+ 
+        // Apply HeuristicConfiguration with dos values to corresponding heuristic IDs
+        for (int i = 0; i < dosHeuristics.length; i++) {
+            int id = dosHeuristics[i];
+            double value = dosValues[i];
+            heuristics[id].getConfiguration().setDos(value);
+        }
+        
+        for (int i = 0; i < iomHeuristics.length; i++) {
+            int id = iomHeuristics[i];
+            double value = iomValues[i];
+            heuristics[id].getConfiguration().setIom(value); 
+        }
+
+        return heuristics; //return the array heuristics containing all the configured heuristic objects.
+    }
+	
+	private int[] get_heuristics_to_use(ProblemDomain problem) {
+		int[] mutations = problem.getHeuristicsOfType(HeuristicType.MUTATION);
+		int[] ruin_recreates = problem.getHeuristicsOfType(HeuristicType.RUIN_RECREATE);
+		int[] local_searches = problem.getHeuristicsOfType(HeuristicType.LOCAL_SEARCH);
+		int totalLength = mutations.length + ruin_recreates.length + local_searches.length;
+		int[] heuristics_to_use = new int[totalLength];
+		System.arraycopy(mutations, 0, heuristics_to_use, 0, mutations.length);
+		System.arraycopy(ruin_recreates, 0, heuristics_to_use, mutations.length, ruin_recreates.length);
+		System.arraycopy(local_searches, 0, heuristics_to_use, mutations.length + ruin_recreates.length, local_searches.length);
+		
+		return heuristics_to_use;
+	}
+	
+	
+
+}

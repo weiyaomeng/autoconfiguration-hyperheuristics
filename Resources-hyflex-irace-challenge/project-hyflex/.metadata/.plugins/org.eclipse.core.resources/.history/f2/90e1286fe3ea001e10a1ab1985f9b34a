@@ -1,0 +1,47 @@
+package choicefunction;
+import AbstractClasses.HyperHeuristic;
+import AbstractClasses.ProblemDomain;
+
+public class ModifiedChoiceFunctionAllMoves extends HyperHeuristic {
+	
+	/**
+	 * creates a new ModifiedChoiceFunctionAllMoves object with a random seed
+	 */
+	public ModifiedChoiceFunctionAllMoves(long seed){
+		super(seed);
+	}
+	
+	/**
+	 * This method defines the strategy of the hyper-heuristic
+	 * @param problem the problem domain to be solved
+	 */
+	public void solve(ProblemDomain problem) {  
+		//initialise the default solution and supporting variables 
+		problem.initialiseSolution(0);
+		double phi = 0.50, delta = 0.50;
+		int heuristic_to_apply = 0, init_flag = 0;
+		double new_obj_function_value = 0.00;
+		long time_exp_before, time_exp_after, time_to_apply;
+		int number_of_heuristics = problem.getNumberOfHeuristics();
+		double current_obj_function_value = problem.getFunctionValue(0);
+		double best_heuristic_score = 0.00, fitness_change = 0.00, prev_fitness_change = 0.00;
+		double[] F = new double[number_of_heuristics], f1 = new double[number_of_heuristics], f3 = new double[number_of_heuristics];
+		double[][] f2 = new double[number_of_heuristics][number_of_heuristics];
+		int last_heuristic_called = 0;
+		int[] crossover_heuristics = problem.getHeuristicsOfType(ProblemDomain.HeuristicType.CROSSOVER);
+		for (int i = 0; i < crossover_heuristics.length;i++) {//Give crossover no chance of being selected
+			f3[crossover_heuristics[i]]=-1.00/0.00;
+		}
+		
+	}
+	
+	/**
+	 * this method must be implemented, to provide a different name for each hyper-heuristic
+	 * @return a string representing the name of the hyper-heuristic
+	 */
+	public String toString() {
+		return "Modified Choice Function - All Moves";
+	}
+	
+
+}

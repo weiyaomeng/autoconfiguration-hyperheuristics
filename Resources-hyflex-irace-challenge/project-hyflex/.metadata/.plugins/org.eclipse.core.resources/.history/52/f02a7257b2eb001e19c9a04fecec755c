@@ -1,0 +1,50 @@
+package examples.cf;
+
+/*
+ * This class implements a simplified choice function hyper-heuristics for the purpose of the NATCOR2024 @UoN
+ * The hyper-heuristic operates on heuristics of type MUTATION, LOCAL_SEARCH, RUIN_RECREATE and uses a simple 'All Moves' acceptance criteria.
+ * For each of these heuristics, parameters IOM and DOS are applied.
+ * 
+ * The simplified version of the modified choice function is:
+ * F_t(h_j) = phi_t * f1(h_j) + (1-phi) * f3(h_j)
+ * @param F_t: the schore of the heuristic h_j at iteration t.
+ * @param f1: a function to score the h_j based on improvement and time taken from its previous application.
+ * @param f3: a function to score the h_j based on the time since h_j was last chosen
+ * @param phi: if the candidate solution quality was improved, phi = 0.99; else, phi is updated as phi_t = max(0.01, phi_{t-1}-0.01)
+ * 
+ * f1(h_j) = I(h_j) / T(h_j)
+ * @param I: the change in solution quality as a result of applying h_j
+ * @param T: the time taken in seconds to apply the h_j the last time it was applied
+ * 
+ * f3(h_j) = the time in seconds since the h_j was last chosen
+ * 
+ * @author Weiyao Meng
+ * @date 2024.03.26
+ */
+
+public class HeuristicConfiguration {
+
+	private double iom, dos;
+	
+	public HeuristicConfiguration(double iom, double dos) {
+		
+		this.iom = iom;
+		this.dos = dos;
+	}
+
+	public double getIom() {
+		return iom;
+	}
+
+	public double getDos() {
+		return dos;
+	}
+	
+	public void setIom(double iom) {
+		this.iom = iom;
+	}
+	
+	public void setDos(double dos) {
+		this.dos = dos;
+	}
+}

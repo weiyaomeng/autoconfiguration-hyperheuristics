@@ -1,0 +1,160 @@
+package experiment;
+import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
+import AbstractClasses.HyperHeuristic;
+import AbstractClasses.ProblemDomain;
+import travelingSalesmanProblem.TSP;
+import config6params.ExampleHH;
+
+public class RunTestTxt {
+	private static Random rnd = new Random(123456789);
+    private static Map<Integer, long[]> instanceSeedsMap = new HashMap<>(); // Map to store seeds for each instance and each run
+//    private static int[] instances = {6, 7, 8, 9}; // Array containing the IDs of instances to test
+    private static int[] instances = {6, 7};
+    private static int numberOfRuns = 2; // Number of runs for each instance
+    private static long time=10000; // Time limit for each run
+    
+    private static PrintStream originalOut = System.out;
+	
+    public static void main(String[] args) {
+    	// Set random seeds for instances and each run
+    	setInstanceSeeds();
+    	
+    	// Set parameter values for testing
+    	double[] dosValue = {0.8, 0.8, 0.8};
+		double[] iomValue = {0.8, 0.8, 0.8};
+		
+		String filename = "Test_algorithm_tuned.txt";
+		try {
+			PrintStream fileOut = new PrintStream(new FileOutputStream(filename));
+			System.setOut(fileOut); // Set standard output to the file
+			// Print test configurations
+			System.out.println("Test configurations: "+formatValues(dosValue, iomValue));
+			// Test the algorithm for each instance with the provided parameters
+	    	for(int insid : instances) {
+	    		System.out.println("Instance: "+insid);
+	    		testAlgorithm(insid, dosValue, iomValue);
+	    	}
+	    	fileOut.close();
+		} catch(FileNotFoundException e) {
+			System.err.println("Error: File '" + filename + "' not found.");
+		}
+		// Reset standard output to the original
+        System.setOut(originalOut);
+		
+		
+    	
+    	// Set default parameter values
+    	double[] defaults = {0.2, 0.2, 0.2};
+     	filename = "Test_algorithm_default.txt";
+		try {
+			PrintStream fileOut = new PrintStream(new FileOutputStream(filename));
+			System.setOut(fileOut); // Set standard output to the file
+			// Print test configurations
+			System.out.println("Test configurations: "+formatValues(defaults, defaults));
+			// Test the algorithm for each instance with the provided parameters
+	    	for(int insid : instances) {
+	    		System.out.println("Instance: "+insid);
+	    		testAlgorithm(insid, defaults, defaults);
+	    	}
+	    	fileOut.close();
+		} catch(FileNotFoundException e) {
+			System.err.println("Error: File '" + filename + "' not found.");
+		}
+		// Reset standard output to the original
+        System.setOut(originalOut);
+    	
+    	
+    	/*
+    	 * To Modify: Add additional scenarios to test
+    	 */
+//    	double[] dos = {};
+//		double[] iom = {};
+//		System.out.println("Test configurations: "+formatValues(dos, iom));
+//    	for(int insid : instances) {testAlgorithm(insid, dosValue, iomValue);}
+        
+    }
+
+    // Set random seeds for each instance and each run
+    private static void setInstanceSeeds() {
+        for (int instance : instances) {
+            long[] seeds = new long[numberOfRuns];
+            for (int i = 0; i < numberOfRuns; i++) {
+                seeds[i] = rnd.nextInt();
+            }
+            instanceSeedsMap.put(instance, seeds);
+        }
+    }
+    
+    // Test the algorithm for a given instance with specified parameters
+    private static void testAlgorithm(int insid, double[] dosValue, double[] iomValue) {
+    	// Get seeds for the TSP instance
+        long[] insseeds = instanceSeedsMap.get(insid);
+        
+        // Iterate over runs for the instance
+		for(int runid = 0; runid < numberOfRuns; runid++) {
+			// Get the seed for the current run
+			long insseed = insseeds[runid];
+			// Get the seed for the algorithm
+			long algseed = rnd.nextLong();
+						
+        	//create a ProblemDomain object with a seed for the random number generator
+    		ProblemDomain problem = new TSP(insseed);
+    		
+    		//creates an ExampleHyperHeuristic object with a seed for the random number generator
+    		HyperHeuristic hyper_heuristic_object = new ExampleHH(algseed, dosValue, iomValue);
+    		
+    		//we must load an instance within the problem domain, in this case we choose instance 2
+    		problem.loadInstance(insid);
+    		
+    		//we must set the time limit for the hyper-heuristic in milliseconds, in this example we set the time limit to 1 minute
+    		hyper_heuristic_object.setTimeLimit(time);
+    		
+    		//a key step is to assign the ProblemDomain object to the HyperHeuristic object. 
+    		//However, this should be done after the instance has been loaded, and after the time limit has been set
+    		hyper_heuristic_object.loadProblemDomain(problem);
+    		
+    		// Print information before running the hyper-heuristic
+//    		printAlgorithmInfo(problem, hyper_heuristic_object, insid, runid, insseed, algseed);
+            
+           //now that all of the parameters have been loaded, the run method can be called.
+    		//this method starts the timer, and then calls the solve() method of the hyper_heuristic_object.
+    		hyper_heuristic_object.run();
+    		
+    		// Obtain the best solution found within the time limit
+//            System.out.println("Best solution value found: ");
+            System.out.println(hyper_heuristic_object.getBestSolutionValue());
+//            System.out.println(); // Empty line
+        }
+    }
+    
+    // Print algorithm information before running
+    private static void printAlgorithmInfo(ProblemDomain problem, HyperHeuristic hyperHeuristic, int insid, int runid, long insseed, long algseed) {
+        System.out.println("Algorithm: " + hyperHeuristic.toString());
+        System.out.println("Problem instance: " + problem.getClass() + " ID: " + insid);
+        System.out.println("Time limit set to: " + time / 1000 + " seconds");
+        System.out.println("Run: " + runid + "/" + numberOfRuns + ". Instance seed: " + insseed + ". Algorithm seed: " + algseed);
+        System.out.println("Search ...");
+    }
+    
+    // Format parameter values for printing
+    private static String formatValues(double[] dosValue, double[] iomValue) {
+        StringBuilder sb = new StringBuilder("-d");
+        appendValues(sb, dosValue);
+        sb.append(" -i");
+        appendValues(sb, iomValue);
+        return sb.toString();
+    }
+
+    // Helper method to append values to a StringBuilder
+    private static void appendValues(StringBuilder sb, double[] values) {
+        for (double value : values) {
+            sb.append(" ").append(value);
+        }
+    }
+        
+}
+

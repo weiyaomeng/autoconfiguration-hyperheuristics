@@ -1,0 +1,98 @@
+package choicefunction;
+
+import java.text.DecimalFormat;
+
+public class SimplifiedChoiceFunction {
+
+	private Heuristic[] heuristics;
+
+	private double phi;
+
+	public SimplifiedChoiceFunction(Heuristic[] heuristics) {
+
+		this.heuristics = heuristics;
+//		this.phi = 0.99;
+		this.phi = 0.5;
+	}
+
+	/**
+	 *
+	 * @param heuristic
+	 * @param timeApplied Current time in nanoseconds.
+	 * @param timeTaken Time taken to apply <code>heuristic</code> in nanoseconds.
+	 * @param current Objective value of the current solution, f(s_i).
+	 * @param candidate Objective value of the candidate solution f(s'_i).
+	 */
+	public void updateHeuristicData(Heuristic heuristic, long timeApplied, long timeTaken, double current, double candidate) {
+		
+		
+		// timeLastApplied
+		heuristic.getData().setTimeLastApplied(timeApplied);
+		
+		// previousApplicationDuration
+		heuristic.getData().setPreviousApplicationDuration(timeTaken);
+		
+		// F_delta
+		heuristic.getData().setF_delta(current-candidate);
+		// if improvement - f_delta is negative
+		
+		this.updatePhi(current, candidate);
+		
+	}
+
+	public Heuristic selectHeuristicToApply() {
+		
+		Heuristic selectedHeuristic = null;
+		
+		double bestScore = -Double.MAX_VALUE;
+		
+		for (Heuristic heuristic : heuristics) {
+			System.out.println("Score of "+heuristic.getHeuristicId()+" is:");
+            double score = this.calculateScore(heuristic, System.nanoTime());
+            if (score > bestScore) {
+                bestScore = score;
+                selectedHeuristic = heuristic;
+            }
+            System.out.print(" Score: "+score);
+        }
+		
+		return selectedHeuristic;
+		
+	}
+	
+	public double calculateScore(Heuristic h, long currentTime) {
+		
+		// f1 = -f_delta/timeTaken
+		double I = h.getData().getF_delta();
+		double T = (h.getData().getPreviousApplicationDuration()/1_000_000_000)+1;
+		double f1 = I/T;
+		
+		// f3 = the time in seconds since the h was last chosen by scf
+		double f3 = (currentTime - h.getData().getTimeLastApplied())/ 1_000_000_000;
+		
+		System.out.print("f1 score: "+f1+" "+h.getData().getF_delta()+" "+(h.getData().getPreviousApplicationDuration()/ 1_000_000_000)+" f3 score: "+f3+" "+currentTime/ 1_000_000_000+" "+(h.getData().getTimeLastApplied()/ 1_000_000_000));
+		
+		// F = phi * f1 + (1-phi) * f3
+		return this.phi*f1+(1-phi)*f3;
+		
+	}
+
+	/**
+	 * this method is introduced to combat some rounding issues introduced by Java
+	 * @return a double of the input d, rounded to two decimal places
+	 */
+	public double roundTwoDecimals(double d) {
+		DecimalFormat two_d_form = new DecimalFormat("#.##");
+		return Double.valueOf(two_d_form.format(d));
+	}
+	
+	public void updatePhi(double current, double candidate) {
+		if(current>candidate) {
+			this.phi = 0.99;
+		}else {
+			this.phi -= 0.01;
+		}
+	}
+	
+
+}

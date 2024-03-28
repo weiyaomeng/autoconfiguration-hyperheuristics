@@ -1,0 +1,130 @@
+package iraceManyParameters;
+import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
+import AbstractClasses.HyperHeuristic;
+import AbstractClasses.ProblemDomain;
+import travelingSalesmanProblem.TSP;
+
+public class RunTest {
+	private static Random rnd = new Random(123456789);
+	
+    private static Map<Integer, long[]> instanceSeedsMap = new HashMap<>();
+    private static int[] instances = {6, 7, 8, 9};
+    private static int numberOfRuns = 10;
+    private static long time=10000;
+	
+    public static void main(String[] args) {
+    	// set instance random seeds
+    	setInstanceSeeds();
+    	// set algorithm random seeds
+    	//
+    	
+    	for(int insid : instances) {
+    		
+    		// Get seed for the TSP instance
+            long[] insseeds = instanceSeedsMap.get(insid);
+            
+            /*
+             * Test the algorithm with default parameter settings
+             */
+        	for(int runid = 0; runid < numberOfRuns; runid++) {
+				
+				double[] dosValue = {0.2, 0.2, 0.2};
+				double[] iomValue = {0.2, 0.2, 0.2};
+				long insseed = insseeds[runid];
+				long algseed = rnd.nextLong();
+							
+            	//create a ProblemDomain object with a seed for the random number generator
+        		//ProblemDomain problem = new SAT(1234);
+        		ProblemDomain problem = new TSP(insseed);
+        		
+        		//creates an ExampleHyperHeuristic object with a seed for the random number generator
+        		HyperHeuristic hyper_heuristic_object = new ExampleHyperHeuristic1(algseed, dosValue, iomValue);
+        		
+        		//we must load an instance within the problem domain, in this case we choose instance 2
+        		problem.loadInstance(insid);
+        		
+        		//we must set the time limit for the hyper-heuristic in milliseconds, in this example we set the time limit to 1 minute
+        		hyper_heuristic_object.setTimeLimit(time);
+        		
+        		//a key step is to assign the ProblemDomain object to the HyperHeuristic object. 
+        		//However, this should be done after the instance has been loaded, and after the time limit has been set
+        		hyper_heuristic_object.loadProblemDomain(problem);
+        		
+        		// Print information before running the hyper-heuristic
+                System.out.println("Algorithm: "+hyper_heuristic_object.toString());
+                System.out.println("Problem instance: " + problem.getClass()+" ID: "+insid);
+                System.out.println("Time limit set to: " + hyper_heuristic_object.getTimeLimit()/1000 + " seconds");
+                System.out.println("Run: " + runid + "/" + numberOfRuns+" - instance seed " + insseed + " - algorithm seed" + algseed);
+                System.out.println("Search ...");
+                
+               //now that all of the parameters have been loaded, the run method can be called.
+        		//this method starts the timer, and then calls the solve() method of the hyper_heuristic_object.
+        		hyper_heuristic_object.run();
+        		
+        		// Obtain the best solution found within the time limit
+                System.out.println("Best solution value found: ");
+                System.out.println(hyper_heuristic_object.getBestSolutionValue());
+            }
+            
+            
+            
+			for(int runid = 0; runid < numberOfRuns; runid++) {
+				
+				double[] dosValue = {0.8, 0.8, 0.8};
+				double[] iomValue = {0.8, 0.8, 0.8};
+				long insseed = insseeds[runid];
+				long algseed = rnd.nextLong();
+							
+            	//create a ProblemDomain object with a seed for the random number generator
+        		//ProblemDomain problem = new SAT(1234);
+        		ProblemDomain problem = new TSP(insseed);
+        		
+        		//creates an ExampleHyperHeuristic object with a seed for the random number generator
+        		HyperHeuristic hyper_heuristic_object = new ExampleHyperHeuristic1(algseed, dosValue, iomValue);
+        		
+        		//we must load an instance within the problem domain, in this case we choose instance 2
+        		problem.loadInstance(insid);
+        		
+        		//we must set the time limit for the hyper-heuristic in milliseconds, in this example we set the time limit to 1 minute
+        		hyper_heuristic_object.setTimeLimit(time);
+        		
+        		//a key step is to assign the ProblemDomain object to the HyperHeuristic object. 
+        		//However, this should be done after the instance has been loaded, and after the time limit has been set
+        		hyper_heuristic_object.loadProblemDomain(problem);
+        		
+        		// Print information before running the hyper-heuristic
+                System.out.println("Algorithm: "+hyper_heuristic_object.toString());
+                System.out.println("Problem instance: " + problem.getClass()+" ID: "+insid);
+                System.out.println("Time limit set to: " + hyper_heuristic_object.getTimeLimit()/1000 + " seconds");
+                System.out.println("Run: " + runid + "/" + numberOfRuns+" - instance seed " + insseed + " - algorithm seed" + algseed);
+                System.out.println("Search ...");
+                
+               //now that all of the parameters have been loaded, the run method can be called.
+        		//this method starts the timer, and then calls the solve() method of the hyper_heuristic_object.
+        		hyper_heuristic_object.run();
+        		
+        		// Obtain the best solution found within the time limit
+                System.out.println("Best solution value found: ");
+                System.out.println(hyper_heuristic_object.getBestSolutionValue());
+            }
+    		
+    	}
+        
+    }
+
+    private static void setInstanceSeeds() {
+        for (int instance : instances) {
+            long[] seeds = new long[numberOfRuns];
+            for (int i = 0; i < numberOfRuns; i++) {
+                seeds[i] = rnd.nextInt();
+            }
+            instanceSeedsMap.put(instance, seeds);
+        }
+    }
+        
+}
+

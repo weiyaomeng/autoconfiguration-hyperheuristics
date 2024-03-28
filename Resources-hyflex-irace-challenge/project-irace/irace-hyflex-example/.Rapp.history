@@ -1,0 +1,33 @@
+library(iraceplot)
+example("report",ask=FALSE)
+library(irace)
+q()
+library("irace")
+q()
+install.package("irace")
+install.packages("irace")
+library("irace")
+q()
+# Load the package#
+library("irace")#
+# Obtain the installation path#
+system.file(package = "irace")
+irace --help
+irace.cmdline("--help")
+# Load the package#
+library("irace")#
+# Obtain the installation path#
+system.file(package = "irace")
+which irace
+library(irace)
+irace.cmdline
+system.file(package = "irace")
+ls
+cd ..
+dir
+setwd("Desktop/NATCOR/project-irace/irace-hyflex-example")
+irace.cmdline()
+library("irace")
+irace.cmdline()
+irace.cmdline()
+irace.cmdline()
