@@ -1,5 +1,0 @@
-INDEX VERSION 1.131+/Users/weiyao/Desktop/NATCOR/project-hyflex/.metadata/.plugins/org.eclipse.jdt.core
-3181726239.index
-1865797976.index
-235274038.index
-795772760.index
