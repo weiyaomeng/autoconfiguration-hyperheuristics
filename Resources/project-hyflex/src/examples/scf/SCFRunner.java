@@ -5,19 +5,12 @@ import AbstractClasses.ProblemDomain;
 import travelingSalesmanProblem.TSP;
 
 /**
- * This class shows how to run a selected hyper-heuristic on a selected problem domain.
- * It shows the minimum that must be done to test a hyper heuristic on a problem domain, and it is 
- * intended to be read before the ExampleRun2 class, which provides an example of a more complex set-up
- * 
+ * This class shows how to run the simplified hyper-heuristic.
+
  * @author Weiyao Meng (weiyao.meng2@nottingham.ac.uk)
- * @date 2024.03.26
+ * @date 2024.04.04
  */
 
-/* 
- * This class represents a heuristic that can be applied to solve a problem.
- * 
- * @author Warren G Jackson (warren.jackson1@nottingham.ac.uk)
- */
 public class SCFRunner {
 
 	public static void main(String[] args) {

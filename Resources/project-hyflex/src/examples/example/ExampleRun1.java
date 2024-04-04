@@ -7,7 +7,7 @@ import travelingSalesmanProblem.TSP;
 /**
  * This class shows how to run a selected hyper-heuristic on a selected problem domain.
  * It shows the minimum that must be done to test a hyper heuristic on a problem domain, and it is 
- * intended to be read before the ExampleRun2 class, which provides an example of a more complex set-up
+ * intended to be read before other example classes provided in HyFlex website, which provides more complex set-ups
  */
 public class ExampleRun1 {
 

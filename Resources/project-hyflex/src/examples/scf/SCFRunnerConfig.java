@@ -7,27 +7,25 @@ import travelingSalesmanProblem.TSP;
 /**
  * This class shows how to run the simplified hyper-heuristic with arguments on a selected problem domain.
  * When executing this class, please ensure to set the run configurations. 
- * The "-p" (instance ID) and "-t" (termination time) options are mandatory: e.g., -p 6 -t 10000
+ * <id.configuration> <id.instance> <seed> <instance> -d <configurations> -i <configurations> -t <time>
+ * 
  * Full list of arguments:
- * -insseed <instance-seed>   : Seed for the instance generator (default: 1234)
- * -algseed <algorithm-seed>  : Seed for the algorithm (default: 5678)
- * -p <instance-id>           : ID of the problem instance to use
- * -t <termination-time>      : Termination time for the hyper-heuristic in milliseconds
- * -d <DOS-values>            : Depth of Search (DOS) values separated by spaces (default: 0.2 0.2 0.2)
- * -i <IOM-values>            : Intensity of Mutation (IOM) values separated by spaces (default: 0.2 0.2 0.2)
- * Example usage: 
- * -p 6 -t 10000
- * -p 6 -t 10000 -insseed 20240408 -algseed 20240409 -d 0.2 0.4 0.6 -i 0.1 0.3 0.5
+ * id.configuration           : an alphanumeric string as an identifier for a configuration in irace (but is not used within HyFlex)
+ * id.instance                : an alphanumeric string as an identifier for an instance in irace (but is not used within HyFlex)
+ * seed                       : Seed for the instance generator (default: 1234)
+ * instance                   : ID of the problem instance to use
+ * -d <configurations>        : Depth of Search (DOS) values separated by spaces (default: 0.2 0.2 0.2)
+ * -i <configurations>        : Intensity of Mutation (IOM) values separated by spaces (default: 0.2 0.2 0.2)
+ * -t <time>                  : Termination time for the hyper-heuristic in milliseconds
+ * 
+ * Example program arguments as run configuration: 
+ * 1 2024 1234 0 -d 0.1 0.2 0.3 -i 0.4 0.5 0.6 -t 10000
  * 
  * @author Weiyao Meng (weiyao.meng2@nottingham.ac.uk)
- * @date 2024.03.26
+ * @date 2024.04.04
  */
 
-/* 
- * This class represents a heuristic that can be applied to solve a problem.
- * 
- * @author Warren G Jackson (warren.jackson1@nottingham.ac.uk)
- */
+
 public class SCFRunnerConfig {
 
 	public static void main(String[] args) {
@@ -43,25 +41,20 @@ public class SCFRunnerConfig {
 		int insid=0; long time=0; 
 		
 		//-------------------------------Parse command line arguments for parameters--------------------------
-		// Parse command line arguments
+		// Parse command line arguments: <id.configuration> <id.instance> <seed> <instance> -d <configuration> -i <configuration> -t <time>
+		
+		if(args.length < 4) {
+			System.err.println("Usage: java -jar <runner.jar> <id.configuration> <id.instance> <seed> <instance> -d <configuration> -i <configuration> -t <time>");
+			System.exit(1);
+		}
+		insseed = Long.parseLong(args[2]);
+		algseed = insseed+1;
+		insid = Integer.parseInt(args[3]);
 		for (int i = 0; i < args.length; i++) {
 		    switch (args[i]) {
-			 	// seed
-	        	case "-insseed":
-	        		insseed = Long.parseLong(args[++i]);
-	        		break;
-	        	case "-algseed":
-	        		algseed = Long.parseLong(args[++i]);
-	        		break;
-			 	// instance id
-	            case "-p":
-	            	insid = Integer.parseInt(args[++i]);
-	            	pSpecified = true;
-	                break;
 	             // termination time
                 case "-t":
                 	time = Long.parseLong(args[++i]);
-                	tSpecified = true;
                 	break;
             	// Parse dos / iom values
 		        case "-d":
@@ -74,12 +67,6 @@ public class SCFRunnerConfig {
 		            break; // Handle unknown arguments if needed
 		    }
 		}
-		
-		// Check if -p and -t are specified
-        if (!pSpecified || !tSpecified) {
-            System.out.println("Error: -p and -t are required.");
-            System.exit(1);
-        }
 		
         //-------------------------------Execute the example HH---------------------------------
 

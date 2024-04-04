@@ -14,7 +14,7 @@ import AbstractClasses.ProblemDomain.HeuristicType;
  * For each of these heuristics, parameters IOM and DOS are applied.
  * 
  * @author Weiyao Meng (weiyao.meng2@nottingham.ac.uk)
- * @date 2024.03.26
+ * @date 2024.04.04
  */
 
 public class RN extends HyperHeuristic {
