@@ -1,8 +1,10 @@
 
 
-<img src="https://lopez-ibanez.eu/2024-natcor-aac/img/natcor-logo.png" alt="Logo 3">
-<img src="https://www.natcor.ac.uk/wp-content/uploads/2017/06/Nottingham_logos.png" alt="Logo 1" width="200" height="120">
-<img src="https://www.nottingham.ac.uk/research/groups/col/images/rotating-images-banner/a-col3-logo.png" alt="Logo 2" width="300" height="120">
+<img src="https://lopez-ibanez.eu/2024-natcor-aac/img/natcor-logo.png" alt="Logo 3" width="320" height="120">
+<!--
+<img src="https://www.natcor.ac.uk/wp-content/uploads/2017/06/Nottingham_logos.png" alt="Logo 1" width="200" height="100">
+<img src="https://www.nottingham.ac.uk/research/groups/col/images/rotating-images-banner/a-col3-logo.png" alt="Logo 2" width="280" height="100">
+-->
 
 
 # Automated Configuration (irace) and Selection Hyper-heuristics (HyFlex) Challenge
