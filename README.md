@@ -32,7 +32,7 @@ To get started with the challenge, follow these steps:
 
 ## Additional Resources
 
-- [HyFlex website - CHeSC 2011](https://web.archive.org/web/20210518021139/http://www.asap.cs.nott.ac.uk/external/chesc2011/)
+- [HyFlex website - CHeSC 2011](https://www.cs.nott.ac.uk/~pszwj1/chesc2011/)
 - [The irace Package: User Guide](https://cran.r-project.org/web/packages/irace/vignettes/irace-package.pdf)
 - Ochoa, G., Hyde, M., Curtois, T., Vazquez-Rodriguez, J. A., Walker, J., Gendreau, M., ... & Burke, E. K. (2012). Hyflex: A benchmark framework for cross-domain heuristic search. In Evolutionary Computation in Combinatorial Optimization: 12th European Conference, EvoCOP 2012, Málaga, Spain, April 11-13, 2012. Proceedings 12 (pp. 136-147). Springer Berlin Heidelberg.[PDF](https://d1wqtxts1xzle7.cloudfront.net/66799667/HyFlexEvoCOP2012-libre.pdf?1620085686=&response-content-disposition=inline%3B+filename%3DHyFlex_A_benchmark_framework_for_cross_d.pdf&Expires=1712525591&Signature=DTNaUxqFio3UmWFm3-UMJNjcQ0Zg03i0VlvLCoG~~xshKrHE9Zdb0CLurGdejYWV9Jga6fUtysJs67TIke06CgFV-8NRq8wcPZwhxasz1X2ZLa8nLP2zDEue7fLmdYrB5rgSz6GwO1gRen0Rk72cVOju-6DmoSpy-u6IrQoG8uYuTgqzmxvaH1TN8X4WffszeNMhuZDqmx9XH0YLJnZOSqcKLaLUQIgGI4MoBBTMFc5rlrx7vDYWbk1tKfdrOLIqQFFGcW9xBsqubhdeUGkEjqJimCMixkHsy2Qncq0YbS6bKSoSYrIbsaaMOmFD1FoHMU1x5zOiCRvX1GafC02Eiw__&Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA)
 - López-Ibáñez, M., Dubois-Lacoste, J., Cáceres, L. P., Birattari, M., & Stützle, T. (2016). The irace package: Iterated racing for automatic algorithm configuration. Operations Research Perspectives, 3, 43-58.[PDF](https://www.sciencedirect.com/science/article/pii/S2214716015300270)
