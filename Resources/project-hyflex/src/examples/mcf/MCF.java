@@ -64,7 +64,7 @@ public class MCF extends HyperHeuristic {
 		 */
 		int[] crossover_heuristics = problem.getHeuristicsOfType(ProblemDomain.HeuristicType.CROSSOVER);
 		for (int i = 0; i < crossover_heuristics.length;i++) {//Give crossover no chance of being selected
-			f3[crossover_heuristics[i]]=-1.00/0.00;
+			f3[crossover_heuristics[i]]=Double.NEGATIVE_INFINITY;
 		}
 		
 		while (!hasTimeExpired()) { //main loop which runs until time has expired
