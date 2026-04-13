@@ -11,7 +11,7 @@
 
 ## Overview
 
-This repository contains resources and instructions for the "Automated Configuration (irace) and Selection Hyper-heuristics (HyFlex)" challenge, part of the NATCOR course at the University of Nottingham in 2024. The challenge focuses on enhancing the performance of provided hyper-heuristics through automatic algorithm configuration and other techniques.
+This repository contains resources and instructions for the "Automated Configuration (irace) and Selection Hyper-heuristics (HyFlex)" challenge, part of the NATCOR course at the University of Nottingham in 2026. The challenge focuses on enhancing the performance of provided hyper-heuristics through automatic algorithm configuration and other techniques.
 
 ## Resources
 
